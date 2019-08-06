@@ -1,0 +1,5 @@
+Usuario:    Administrador
+Pasword:  Administrador
+
+Nombre de Fichero interno del *.bak : Proyecto 
+Nota : en " C:\Base_de_Datos_ProySoft " crea una carpeta donde guarda las bases de datos que se creen nuevas.

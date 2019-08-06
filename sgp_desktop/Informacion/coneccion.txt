@@ -1,0 +1,4 @@
+Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=DBYY;Data Source=ICHIGO;Use Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;Workstation ID=ICHIGO;Use Encryption for Data=False;Tag with column collation when possible=False
+
+
+Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=DBYY;Data Source=ICHIGO
