@@ -1,0 +1,392 @@
+ParametersFormat DEFINITIONS IMPLICIT TAGS::= BEGIN
+
+domainIDO  OBJECT IDENTIFIER::= {identified-organization(4) etsi(0) securityDomain(2) lawfulIntercept(2) lawfulInterceptSubDomainID(1) version(7) } 
+
+CommunicationIdentifier     ::= SEQUENCE
+{
+	communication-Identity-Number   [0] OCTET STRING (SIZE (1..8)) OPTIONAL,
+	network-Identifier              [1] Network-Identifier
+}
+
+Network-Identifier      ::= SEQUENCE
+{
+	operator-Identifier         [0] OCTET STRING (SIZE (1..5)),
+	network-Element-Identifier [1] Network-Element-Identifier OPTIONAL
+}
+
+Network-Element-Identifier ::= CHOICE
+{
+	e164-Format         [1] OCTET STRING (SIZE (1..25)),
+	x25-Format          [2] OCTET STRING (SIZE (1..25)),
+	iP-Format           [3] OCTET STRING (SIZE (1..25)),
+	dNS-Format          [4] OCTET STRING (SIZE (1..25)),
+	iP-Address          [5] IPAddress
+}
+
+CC-Link-Identifier ::= OCTET STRING (SIZE (1..8))
+
+TimeStamp               ::= CHOICE
+{
+	localTime           [0] LocalTimeStamp,
+	utcTime             [1] UTCTime
+}
+
+LocalTimeStamp             ::= SEQUENCE
+{
+	generalizedTime                [0] GeneralizedTime,
+	winterSummerIndication         [1] ENUMERATED
+	{
+		notProvided(0),
+		winterTime(1),
+		summerTime(2)
+	}
+}
+
+
+PartyInformation            ::= SEQUENCE
+{
+	party-Qualifier                     [0] ENUMERATED
+	{
+		originating-Party(0),
+		terminating-Party(1),
+		forwarded-to-Party(2),
+		gPRS-Target(3)
+	},
+	partyIdentity                       [1] SEQUENCE
+	{
+		imei                [1] OCTET STRING (SIZE (8)) OPTIONAL,
+		tei                 [2] OCTET STRING (SIZE (1..15)) OPTIONAL,
+		imsi                [3] OCTET STRING (SIZE (3..8)) OPTIONAL,
+		callingPartyNumber [4] CallingPartyNumber OPTIONAL,
+		calledPartyNumber   [5] CalledPartyNumber OPTIONAL,
+		msISDN              [6] OCTET STRING (SIZE (1..9)) OPTIONAL,
+		e164-Format         [7] OCTET STRING (SIZE (1..25)) OPTIONAL,
+		sip-uri             [8] OCTET STRING OPTIONAL,
+		tel-url                 [9] OCTET STRING OPTIONAL
+	},
+	services-Information                [2] Services-Information OPTIONAL,
+	supplementary-Services-Information [3] Supplementary-Services OPTIONAL,
+	services-Data-Information           [4] Services-Data-Information OPTIONAL
+}
+
+CallingPartyNumber      ::= CHOICE
+{
+	iSUP-Format         [1] OCTET STRING (SIZE (1..25)),
+	dSS1-Format         [2] OCTET STRING (SIZE (1..25)),
+	mAP-Format          [3] OCTET STRING (SIZE (1..25))
+}
+
+CalledPartyNumber       ::= CHOICE
+{
+	iSUP-Format         [1] OCTET STRING (SIZE (1..25)),
+	mAP-Format          [2] OCTET STRING (SIZE (1..25)),
+	dSS1-Format         [3] OCTET STRING (SIZE (1..25))
+}
+
+Location    ::= SEQUENCE
+{
+	e164-Number         [1] OCTET STRING (SIZE (1..25)) OPTIONAL,
+	globalCellID        [2] OCTET STRING (SIZE (5..7)) OPTIONAL,
+	tetraLocation       [3] TetraLocation OPTIONAL,
+	rAI                 [4] OCTET STRING (SIZE (6)) OPTIONAL,
+	gsmLocation         [5] GSMLocation OPTIONAL,
+	umtsLocation        [6] UMTSLocation OPTIONAL,
+	sAI                 [7] OCTET STRING (SIZE (7)) OPTIONAL
+}
+
+TetraLocation   ::= CHOICE
+{
+	ms-Loc      [1] SEQUENCE
+	{
+		mcc             [1] INTEGER (0..1023),
+		mnc             [2] INTEGER (0..16383),
+		lai             [3] INTEGER (0..65535),
+		ci              [4] INTEGER OPTIONAL
+	},
+	ls-Loc      [2] INTEGER
+}
+
+
+GSMLocation     ::= CHOICE
+{
+	geoCoordinates      [1] SEQUENCE
+	{
+		latitude    [1] PrintableString (SIZE(7..10)),
+		longitude   [2] PrintableString (SIZE(8..11)),
+		mapDatum    [3] MapDatum DEFAULT wGS84,
+		azimuth     [4] INTEGER (0..359) OPTIONAL
+	},
+	utmCoordinates      [2] SEQUENCE
+	{
+		utm-East    [1] PrintableString (SIZE(10)),
+		utm-North   [2] PrintableString (SIZE(7)),
+		mapDatum    [3] MapDatum DEFAULT wGS84,
+		azimuth     [4] INTEGER (0..359) OPTIONAL
+	},
+	utmRefCoordinates   [3] SEQUENCE
+	{
+		utmref-string   PrintableString (SIZE(13)),
+		mapDatum        MapDatum DEFAULT wGS84
+	},
+	wGS84Coordinates    [4] OCTET STRING
+}
+
+MapDatum ::= ENUMERATED
+{
+	wGS84(1),
+	wGS72(2),
+	eD50(3)
+}
+
+UMTSLocation ::= CHOICE
+{
+	point                [1] GA-Point,
+	pointWithUnCertainty [2] GA-PointWithUnCertainty,
+	polygon              [3] GA-Polygon
+}
+
+GeographicalCoordinates ::= SEQUENCE
+{
+	latitudeSign    ENUMERATED
+	{
+		north(1),
+		south(2)
+	},
+	latitude        INTEGER (0..8388607),
+	longitude       INTEGER (-8388608..8388607)
+}
+
+GA-Point ::= SEQUENCE
+{
+	geographicalCoordinates GeographicalCoordinates
+}
+
+GA-PointWithUnCertainty ::=SEQUENCE
+{
+	geographicalCoordinates     GeographicalCoordinates,
+	uncertaintyCode             INTEGER (0..127)
+}
+
+maxNrOfPoints INTEGER  ::=15
+
+
+GA-Polygon ::= SEQUENCE   OF SEQUENCE
+{
+		geographicalCoordinates     GeographicalCoordinates
+}
+
+CallContentLinkCharacteristics ::= SEQUENCE
+{
+	cCLink-State            [1] CCLink-State OPTIONAL,
+	release-Time            [2] TimeStamp OPTIONAL,
+	release-Reason          [3] OCTET STRING (SIZE(2)) OPTIONAL,
+	lEMF-Address            [4] CalledPartyNumber OPTIONAL
+}	
+
+CCLink-State    ::= ENUMERATED
+{
+	setUpInProcess(1),
+	callActive(2),
+	callReleased(3),
+	lack-of-resource(4)
+}
+
+Intercepted-Call-State          ::= ENUMERATED
+{
+	idle(1),
+	setUpInProcess(2),
+	connected(3)
+}
+
+Services-Information          ::= SEQUENCE
+{
+	iSUP-parameters           [1] ISUP-parameters OPTIONAL,
+	dSS1-parameters-codeset-0 [2] DSS1-parameters-codeset-0 OPTIONAL,
+	mAP-parameters            [3] MAP-parameters OPTIONAL
+}
+
+ISUP-parameters ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-parameters-codeset-0 ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+MAP-parameters ::= SET SIZE (1..256) OF OCTET STRING (SIZE(1..256))
+
+
+Supplementary-Services          ::= SEQUENCE
+{
+	standard-Supplementary-Services     [1] Standard-Supplementary-Services OPTIONAL,
+	non-Standard-Supplementary-Services [2] Non-Standard-Supplementary-Services OPTIONAL,
+	other-Services                      [3] Other-Services OPTIONAL
+}
+
+Standard-Supplementary-Services  ::= SEQUENCE
+{
+	iSUP-SS-parameters           [1] ISUP-SS-parameters OPTIONAL,
+	dSS1-SS-parameters-codeset-0 [2] DSS1-SS-parameters-codeset-0 OPTIONAL,
+	dSS1-SS-parameters-codeset-4 [3] DSS1-SS-parameters-codeset-4 OPTIONAL,
+	dSS1-SS-parameters-codeset-5 [4] DSS1-SS-parameters-codeset-5 OPTIONAL,
+	dSS1-SS-parameters-codeset-6 [5] DSS1-SS-parameters-codeset-6 OPTIONAL,
+	dSS1-SS-parameters-codeset-7 [6] DSS1-SS-parameters-codeset-7 OPTIONAL,
+	dSS1-SS-Invoke-components    [7] DSS1-SS-Invoke-Components OPTIONAL,
+	mAP-SS-Parameters            [8] MAP-SS-Parameters OPTIONAL,
+	mAP-SS-Invoke-Components     [9] MAP-SS-Invoke-Components OPTIONAL
+}
+
+Non-Standard-Supplementary-Services ::= SET SIZE (1..20) OF CHOICE
+{
+	simpleIndication        [1] SimpleIndication,
+	sciData                 [2] SciDataMode
+}
+
+SciDataMode ::= OCTET STRING (SIZE (1..256))
+
+Other-Services ::= SET SIZE (1..50) OF OCTET STRING (SIZE (1..256))
+
+ISUP-SS-parameters ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-SS-parameters-codeset-0 ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-SS-parameters-codeset-4 ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-SS-parameters-codeset-5 ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-SS-parameters-codeset-6 ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-SS-parameters-codeset-7 ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+DSS1-SS-Invoke-Components ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+MAP-SS-Invoke-Components ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+MAP-SS-Parameters ::= SET SIZE (1..256) OF OCTET STRING (SIZE (1..256))
+
+SimpleIndication        ::= ENUMERATED
+{
+	call-Waiting-Indication(0),
+	add-conf-Indication(1),
+	call-on-hold-Indication(2),
+	retrieve-Indication(3),
+	suspend-Indication(4),
+	resume-Indication(5),
+	answer-Indication(6)
+}
+
+
+
+SMS-report      ::= SEQUENCE
+{
+	communicationIdentifier     [1] CommunicationIdentifier,
+	timeStamp                   [2] TimeStamp,
+	sMS-Contents                [3] SEQUENCE
+	{
+		initiator           [1] ENUMERATED
+		{
+			target(0),
+			server(1),
+			undefined-party(2)
+		},
+		transfer-status     [2] ENUMERATED
+		{
+			succeed-transfer(0),
+			not-succeed-transfer(1),
+			undefined(2)
+		} OPTIONAL,
+		other-message       [3] ENUMERATED
+		{
+			yes(0),
+			no(1),
+			undefined(2)
+		} OPTIONAL,
+		content             [4] OCTET STRING (SIZE (1..270)) OPTIONAL
+    }
+}
+
+
+LawfulInterceptionIdentifier ::= OCTET STRING (SIZE (1..25))
+
+National-Parameters ::= SET SIZE (1..40) OF OCTET STRING (SIZE (1..256))
+
+GPRSCorrelationNumber ::= OCTET STRING (SIZE(8..20))
+
+GPRSEvent ::= ENUMERATED
+{
+	pDPContextActivation(1),
+	startOfInterceptionWithPDPContextActive(2),
+	pDPContextDeactivation(4),
+	gPRSAttach(5),
+	gPRSDetach(6),
+	cellOrRAUpdate(10),
+	sMS(11),
+	pDPContextModification(13)
+}
+
+Services-Data-Information ::= SEQUENCE
+{
+	gPRS-parameters     [1] GPRS-parameters OPTIONAL
+}
+
+GPRS-parameters ::= SEQUENCE
+{
+	pDP-address-allocated-to-the-target [1] DataNodeAddress OPTIONAL,
+	aPN                                 [2] OCTET STRING (SIZE(1..100)) OPTIONAL,
+	pDP-type                            [3] OCTET STRING (SIZE(2)) OPTIONAL
+}
+
+GPRSOperationErrorCode ::= OCTET STRING (SIZE(2))
+
+DataNodeAddress ::= CHOICE
+{
+	ipAddress   [1] IPAddress,
+	x25Address [2] X25Address
+}
+
+IPAddress ::= SEQUENCE
+{
+	iP-type         [1] ENUMERATED
+	{
+		iPV4(0),
+		iPV6(1)
+	},
+	iP-value        [2] IP-value,
+	iP-assignment   [3] ENUMERATED
+	{
+		static(1),
+		dynamic(2),
+		notKnown(3)
+	} OPTIONAL
+}
+
+IP-value ::= CHOICE
+{
+	iPBinaryAddress [1] OCTET STRING (SIZE(4..16)),
+	iPTextAddress   [2] IA5String (SIZE(7..45))
+}
+
+X25Address ::= OCTET STRING (SIZE(1..25))
+
+National-HI2-ASN1parameters ::= SEQUENCE
+{
+	countryCode     [1] PrintableString (SIZE (2))
+}
+
+
+
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,116 @@
+IRI DEFINITIONS IMPLICIT TAGS::= BEGIN
+
+IMPORTS 	domainIDO,
+			LawfulInterceptionIdentifier, 
+			CommunicationIdentifier, 
+			TimeStamp,  
+			Intercepted-Call-State,
+			Location,
+			PartyInformation,
+			CallContentLinkCharacteristics,
+			SMS-report,
+			CC-Link-Identifier,
+			National-Parameters,
+			GPRSCorrelationNumber,
+			GPRSEvent,
+			DataNodeAddress,
+			GPRSOperationErrorCode,
+			--UmtsQos,
+			Network-Identifier ,
+			--IMSevent,
+			National-HI2-ASN1parameters
+			
+			FROM ParametersFormat; 
+
+IRIsContent    ::= CHOICE
+{
+   iRIContent        IRIContent,
+   iRISequence       IRISequence
+}
+
+IRISequence ::= SEQUENCE OF IRIContent
+
+IRIContent  ::= CHOICE
+{
+    iRI-Begin-record        [1] IRI-Parameters,
+    iRI-End-record          [2] IRI-Parameters,
+    iRI-Continue-record     [3] IRI-Parameters,
+    iRI-Report-record       [4] IRI-Parameters
+}
+
+
+IRI-Parameters      ::= SEQUENCE
+{
+	domainID                            [0] OBJECT IDENTIFIER (domainIDO) OPTIONAL,
+	iRIversion                          [23] ENUMERATED
+	{
+		version2(2),
+		version3(3),
+		version4(4),
+		version5(5),
+		version6(6),
+		version7(7)
+	} OPTIONAL,
+
+	lawfulInterceptionIdentifier        [1] LawfulInterceptionIdentifier,
+	communicationIdentifier             [2] CommunicationIdentifier,
+	timeStamp                           [3] TimeStamp,
+
+	intercepted-Call-Direct             [4] ENUMERATED
+	{
+		not-Available(0),
+		originating-Target(1),
+		terminating-Target(2)
+	} OPTIONAL,
+	intercepted-Call-State              [5] Intercepted-Call-State OPTIONAL,
+	ringingDuration                     [6] OCTET STRING (SIZE (3)) OPTIONAL,
+    
+	conversationDuration                [7] OCTET STRING (SIZE (3)) OPTIONAL,
+
+	locationOfTheTarget                 [8] Location OPTIONAL,
+
+	partyInformation                    [9] SET SIZE (1..10) OF PartyInformation OPTIONAL,
+
+	callContentLinkInformation          [10] SEQUENCE
+	{
+		cCLink1Characteristics      [1] CallContentLinkCharacteristics OPTIONAL,
+		cCLink2Characteristics      [2] CallContentLinkCharacteristics OPTIONAL
+	} OPTIONAL,
+   
+	release-Reason-Of-Intercepted-Call [11] OCTET STRING (SIZE (2)) OPTIONAL,
+
+	nature-Of-The-intercepted-call      [12] ENUMERATED
+	{
+
+		gSM-ISDN-PSTN-circuit-call(0),
+		gSM-SMS-Message(1),
+		uUS4-Messages(2),
+		tETRA-circuit-call(3),
+		teTRA-Packet-Data(4),
+		gPRS-Packet-Data(5),
+		uMTS-circuit-call(6)
+	} OPTIONAL,
+  
+	serverCenterAddress                 [13] PartyInformation OPTIONAL,
+
+	sMS                                 [14] SMS-report OPTIONAL,
+	cC-Link-Identifier                  [15] CC-Link-Identifier OPTIONAL,
+	national-Parameters                 [16] National-Parameters OPTIONAL,
+	gPRSCorrelationNumber               [18] GPRSCorrelationNumber OPTIONAL,
+	gPRSevent                           [20] GPRSEvent OPTIONAL,
+	sgsnAddress                         [21] DataNodeAddress OPTIONAL,
+	gPRSOperationErrorCode              [22] GPRSOperationErrorCode OPTIONAL,
+	ggsnAddress                         [24] DataNodeAddress OPTIONAL,
+	--qOS                                 [25] UmtsQos OPTIONAL,
+	networkIdentifier                   [26] Network-Identifier OPTIONAL,
+	sMSOriginatingAddress               [27] DataNodeAddress OPTIONAL,
+	sMSTerminatingAddress               [28] DataNodeAddress OPTIONAL,
+	--iMSevent                            [29] IMSevent OPTIONAL,
+	sIPMessage                          [30] OCTET STRING OPTIONAL,
+	servingSGSN-number                  [31] OCTET STRING (SIZE (1..20)) OPTIONAL,
+	servingSGSN-address                 [32] OCTET STRING (SIZE (5..17)) OPTIONAL,
+	national-HI2-ASN1parameters         [255] National-HI2-ASN1parameters OPTIONAL
+}
+
+
+END

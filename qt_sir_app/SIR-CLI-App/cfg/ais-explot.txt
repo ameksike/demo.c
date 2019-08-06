@@ -1,0 +1,24 @@
+INSERT INTO mod_siren.nom_situacionnavegacion( situacion) VALUES ('0');  INSERT INTO mod_siren.nom_tiposensor( nombre) VALUES ('1');  INSERT INTO mod_siren.nom_sensor (nombre, idtiposensor) VALUES ('AIS', (SELECT idtiposensor FROM mod_siren.nom_tiposensor WHERE nombre = '1' LIMIT 1  ));  INSERT INTO mod_siren.nom_tipoembarcacion (codigo, descripcion, denominacion) VALUES ('305', '', '70');   INSERT INTO mod_siren.dat_embarcacion (nombre, idtipoembarcacion, calado, distllamada, eslora, estacionais, manga, mmsi, omi, idsensor, imagen) VALUES ('MELBOURNE STRAIT', (SELECT codigo FROM mod_siren.nom_tipoembarcacion e WHERE e.denominacion = '70' LIMIT 1  ), '6', 'V2DO2', '180', '0', '27', '305279048', '9362736', (SELECT s.idsensor FROM mod_siren.nom_sensor s WHERE s.nombre = 'AIS' LIMIT 1 ), '' );  INSERT INTO mod_siren.dat_localizacion (the_geom) VALUES ((SELECT geometryfromtext('POINT(078402190 22482980 )') LIMIT 1  ));  INSERT INTO mod_siren.dat_localizacionembarcacion (idembarcacion, idlocalizacion, velocidad, cabeceo, rumbo, precisionposicion, idsituacionnavegacion, fecha) VALUES ((SELECT e.idembarcacion FROM mod_siren.dat_embarcacion e WHERE e.mmsi = '305279048' LIMIT 1  ), (SELECT l.idlocalizacion FROM mod_siren.dat_localizacion l WHERE l.the_geom = (SELECT geometryfromtext('POINT(078402190 22482980 )') LIMIT 1  ) LIMIT 1 ), '18', '291', '289', '1', (SELECT s.idsituacionnavegacion FROM mod_siren.nom_situacionnavegacion s WHERE s.situacion = '0' LIMIT 1  ), '21/09/2010 19:34:10');  INSERT INTO mod_siren.dat_puertodestino (idpuertodestino, eta) VALUES ((SELECT p.idpuerto FROM mod_siren.dat_puertos p WHERE p.denominacion = 'PORT EVERGLADES ' LIMIT 1 ), '01/01/1000 00:00:00');  INSERT INTO mod_siren.dat_puertos (denominacion, calado, iddpa, imagen, idlocalizacion) VALUES ('PORT EVERGLADES ', '6', 0, '', (SELECT l.idlocalizacion FROM mod_siren.dat_localizacion l WHERE l.the_geom = (SELECT geometryfromtext('POINT(078402190 22482980 )') LIMIT 1  ) LIMIT 1 ));
+
+
+
+
+INSERT INTO mod_siren.dat_puertodestino (idpuertodestino, eta) VALUES (
+
+(SELECT p.idpuerto FROM mod_siren.dat_puertos p WHERE p.denominacion = 'PORT EVERGLADES ' LIMIT 1 )
+
+, '01/01/1000 00:00:00');
+
+
+
+
+delete from mod_siren.dat_embarcacion Cascade;
+delete from mod_siren.dat_embarcacionpuerto Cascade;
+delete from mod_siren.dat_localizacion Cascade;
+delete from mod_siren.dat_localizacionembarcacion Cascade;
+delete from mod_siren.dat_puertodestino Cascade;
+delete from mod_siren.dat_puertos Cascade;
+delete from mod_siren.nom_sensor Cascade;
+delete from mod_siren.nom_tipoembarcacion Cascade;
+delete from mod_siren.nom_tiposensor Cascade;
+

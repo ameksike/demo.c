@@ -1,0 +1,8 @@
+
+80% 1- Especializacion de Driver receptores (dll) 
+	- driver receptor de AIS 85 %
+	- driver receptor de RAPCOM 02%
+
+02% 2- Sistema intanciador de Receptores basados en driver
+00% 3- Sistema Grafico (modo texto) para la administracion de receptores 
+00% 4- Sistema Grafico para la administracion de receptores 

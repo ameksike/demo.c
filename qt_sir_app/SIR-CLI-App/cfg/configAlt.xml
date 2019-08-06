@@ -1,0 +1,40 @@
+<SIR-Config version="1.0">
+	<radar type="ISS">
+		<transmitter ip="10.12.167.5" port="5000"/>
+		<receiver/>
+		<db type="postgres">
+			<id>ais</id>
+			<port></port>
+			<host>10.12.170.131</host>
+			<name>monitoreo</name>
+			<passw>monitoreo</passw>
+			<user>monitoreo</user>
+		</db>
+	</radar>
+
+	<radar type="TSS">
+		<transmitter ip="10.12.167.5" port="5000"/>
+		<receiver/>
+		<db type="postgres">
+			<id>ais</id>
+			<port></port>
+			<host>10.12.170.131</host>
+			<name>monitoreo</name>
+			<passw>monitoreo</passw>
+			<user>monitoreo</user>
+		</db>
+	</radar>
+
+	<radar type="MSS">
+		<transmitter ip="" port="5000"/>
+		<receiver/>
+		<db type="postgres">
+			<id>rcom</id>
+			<port></port>
+			<host>10.12.170.14</host>
+			<name>monitoreo</name>
+			<passw>dafar</passw>
+			<user>dafar</user>
+		</db>
+	</radar>
+</SIR-Config>

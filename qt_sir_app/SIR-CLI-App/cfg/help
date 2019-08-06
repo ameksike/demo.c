@@ -1,0 +1,20 @@
+ ................................. 
+   Help of SIR system v1.0
+ ................................. 
+ Option list:
+   mode=    ---> set mode control
+   plugin=  ---> set plugins directory 
+   config=  ---> set file of all configurations 
+   helpdoc= ---> set file of help content
+
+ Comand list:
+   >> on            ---> connect all receptors 
+   >> off           ---> disconnect all receptors 
+   >> load 	    ---> reload all driver in file config
+   >> info [option] ---> information of receptors 
+	-all	    ---> option: show all information of system, it is value by default 
+   	-active     ---> option: show the actives receptors
+	-plugins    ---> option: show the plugins directory
+	-config	    ---> option: show the file of configurations 
+	-mode	    ---> option: show the mode control 
+ ................................. 
