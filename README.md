@@ -28,16 +28,16 @@ Define an abstraction layer that allows reading an xml in the form of an associa
 
 ### source
 ```xml
-			<root inf = "roots-inf"> 
-				<tmp inf = "r2.0" value="tmp-val1"> data1 </tmp>
-				<tmp inf = "tmp-val2"		  > data2 </tmp>
-				<tst val = "mist"> 
-					<tm1> tm1A </tm1>
-					<tm1> tm1B </tm1>
-					<tm1> tm1C </tm1>
-					<tm1> tm1D </tm1>
-				</tst>
-			</root>
+	<root inf = "roots-inf"> 
+		<tmp inf = "r2.0" value="tmp-val1"> data1 </tmp>
+		<tmp inf = "tmp-val2"		  > data2 </tmp>
+		<tst val = "mist"> 
+			<tm1> tm1A </tm1>
+			<tm1> tm1B </tm1>
+			<tm1> tm1C </tm1>
+			<tm1> tm1D </tm1>
+		</tst>
+	</root>
 ```
 ### manage with QXmlMetaReader
 ```c++
